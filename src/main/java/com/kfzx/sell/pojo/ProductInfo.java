@@ -2,8 +2,10 @@ package com.kfzx.sell.pojo;
 
 import lombok.Data;
 
-import javax.jnlp.IntegrationService;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.math.BigDecimal;
 
 /**
@@ -19,6 +21,8 @@ public class ProductInfo {
 	/**
 	 * 商品id
 	 */
+	@Id
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String productId;
 	/**
 	 * 商品名称
@@ -43,7 +47,7 @@ public class ProductInfo {
 	/**
 	 * 商品类型
 	 */
-	private Integer productType;
+	private Integer categoryType;
 	/**
 	 * 商品状态
 	 */
