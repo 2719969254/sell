@@ -39,6 +39,7 @@ public class ProductCategoryDaoTest {
 	@Test
 	public void updateTest(){
 		ProductCategory productCategory;
+		//todo 有一个警告！
 		productCategory = productCategoryDao.findById(1).get();
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		productCategory.setCreateTime(df.format(new Date()));
