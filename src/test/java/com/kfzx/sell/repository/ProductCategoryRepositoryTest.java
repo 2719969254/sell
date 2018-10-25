@@ -1,6 +1,6 @@
-package com.kfzx.sell.dao;
+package com.kfzx.sell.repository;
 
-import com.kfzx.sell.pojo.ProductCategory;
+import com.kfzx.sell.entity.ProductCategory;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,40 +16,47 @@ import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ProductCategoryDaoTest {
+public class ProductCategoryRepositoryTest {
 	@Autowired
-	private ProductCategoryDao productCategoryDao;
+	private ProductCategoryRepository productCategoryRepository;
 
 	@Test
-	public void selectOne(){
-		Optional<ProductCategory> productCategory = productCategoryDao.findById(1);
-		System.out.println("----------------->"+productCategory.toString());
+	public void selectOne() {
+		Optional<ProductCategory> productCategory = productCategoryRepository.findById(1);
+		System.out.println("----------------->" + productCategory.toString());
 	}
+
 	@Test
-	public void saveTest(){
+	public void saveTest() {
 		ProductCategory productCategory = new ProductCategory();
 		productCategory.setCategoryName("222");
 		productCategory.setCategoryType(3);
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		productCategory.setCreateTime(df.format(new Date()));
 		productCategory.setUpdateTime(df.format(new Date()));
-		productCategoryDao.save(productCategory);
+		productCategoryRepository.save(productCategory);
 	}
 
 	@Test
-	public void updateTest(){
-		ProductCategory productCategory;
-		//todo 有一个警告！
-		productCategory = productCategoryDao.findById(1).get();
+	public void updateTest() {
+		ProductCategory productCategory = null;
+
+		//productCategory = productCategoryRepository.findById(1).get();
+		Optional<ProductCategory> byId = productCategoryRepository.findById(1);
+		if (byId.isPresent()) {
+			productCategory = byId.get();
+		}
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		assert productCategory != null;
 		productCategory.setCreateTime(df.format(new Date()));
 		productCategory.setUpdateTime(df.format(new Date()));
-		productCategoryDao.save(productCategory);
+		productCategoryRepository.save(productCategory);
 	}
+
 	@Test
-	public void findByCategoryTypeInTest(){
-		List<Integer> list = Arrays.asList(2,3,4);
-		List<ProductCategory> byCategoryTypeIn = productCategoryDao.findByCategoryTypeIn(list);
+	public void findByCategoryTypeInTest() {
+		List<Integer> list = Arrays.asList(2, 3, 4);
+		List<ProductCategory> byCategoryTypeIn = productCategoryRepository.findByCategoryTypeIn(list);
 		System.out.println(byCategoryTypeIn);
 		Assert.assertNotEquals(0, byCategoryTypeIn.size());
 	}

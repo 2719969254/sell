@@ -1,18 +1,18 @@
-package com.kfzx.sell.dao;
+package com.kfzx.sell.repository;
 
-import com.kfzx.sell.pojo.ProductInfo;
+import com.kfzx.sell.entity.ProductInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
 /**
- * ProductInfoDao
+ * ProductInfoRepository
  *
  * @author VicterTian
  * @version V1.0
  * @Date 2018/10/24
  */
-public interface ProductInfoDao extends JpaRepository<ProductInfo,String> {
+public interface ProductInfoRepository extends JpaRepository<ProductInfo,String> {
 	List<ProductInfo> findByProductStatus(Integer productStatus);
 
 }

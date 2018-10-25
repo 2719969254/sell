@@ -1,6 +1,6 @@
-package com.kfzx.sell.dao;
+package com.kfzx.sell.repository;
 
-import com.kfzx.sell.pojo.ProductInfo;
+import com.kfzx.sell.entity.ProductInfo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +14,12 @@ import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ProductInfoDaoTest {
+public class ProductInfoRepositoryTest {
 	@Autowired
-	private ProductInfoDao productInfoDao;
+	private ProductInfoRepository productInfoRepository;
 	@Test
 	public void findById(){
-		Optional<ProductInfo> productInfo = productInfoDao.findById("1");
+		Optional<ProductInfo> productInfo = productInfoRepository.findById("1");
 		System.out.println(productInfo.toString());
 	}
 	@Test
@@ -36,6 +36,6 @@ public class ProductInfoDaoTest {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		productInfo.setCreateTime(df.format(new Date()));
 		productInfo.setUpdateTime(df.format(new Date()));
-		productInfoDao.save(productInfo);
+		productInfoRepository.save(productInfo);
 	}
 }

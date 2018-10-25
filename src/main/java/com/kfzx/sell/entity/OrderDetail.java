@@ -1,4 +1,4 @@
-package com.kfzx.sell.pojo;
+package com.kfzx.sell.entity;
 
 /**
  * @author VicterTian
