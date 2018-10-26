@@ -37,7 +37,7 @@ public class ProductCategoryRepositoryTest {
 		productCategoryRepository.save(productCategory);
 	}
 
-	@Test
+	/*@Test
 	public void updateTest() {
 		ProductCategory productCategory = null;
 
@@ -51,7 +51,7 @@ public class ProductCategoryRepositoryTest {
 		productCategory.setCreateTime(df.format(new Date()));
 		productCategory.setUpdateTime(df.format(new Date()));
 		productCategoryRepository.save(productCategory);
-	}
+	}*/
 
 	@Test
 	public void findByCategoryTypeInTest() {

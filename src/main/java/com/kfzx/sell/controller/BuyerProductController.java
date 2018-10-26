@@ -4,6 +4,7 @@ import com.kfzx.sell.entity.ProductCategory;
 import com.kfzx.sell.entity.ProductInfo;
 import com.kfzx.sell.service.ProductCategoryService;
 import com.kfzx.sell.service.ProductInfoService;
+import com.kfzx.sell.utils.ResultVOUtil;
 import com.kfzx.sell.vo.ProductInfoVO;
 import com.kfzx.sell.vo.ProductVO;
 import com.kfzx.sell.vo.ResultVO;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +35,7 @@ public class BuyerProductController {
 
 	@SuppressWarnings("AlibabaRemoveCommentedCode")
 	@GetMapping("/list")
-	public ResultVO list(){
+	public ResultVO list() {
 		//1.查询所有上架商品
 		List<ProductInfo> productInfoList = productInfoService.findUpAll();
 		/*2.查询类目
@@ -48,29 +48,31 @@ public class BuyerProductController {
 		//精简方法（java8 lambda表达式）
 		*/
 		List<Integer> categoryTypeList = productInfoList.stream().map(ProductInfo::getCategoryType).collect(Collectors.toList());
+		//获取类目list
 		List<ProductCategory> productCategoryList = productCategoryService.findByCategoryTypeIn(categoryTypeList);
 
 		//3.数据封装
 		List<ProductVO> productVOList = new ArrayList<>();
+		//逐个封装
 		for (ProductCategory productCategory : productCategoryList) {
 			ProductVO productVO = new ProductVO();
+			//设置data的name和type
 			productVO.setCategoryType(productCategory.getCategoryType());
 			productVO.setCategoryName(productCategory.getCategoryName());
 			List<ProductInfoVO> productInfoVOList = new ArrayList<>();
 			for (ProductInfo productInfo : productInfoList) {
-				if(productInfo.getCategoryType().equals(productCategory.getCategoryType())){
+				//查询同样类目的商品
+				if (productInfo.getCategoryType().equals(productCategory.getCategoryType())) {
 					ProductInfoVO productInfoVO = new ProductInfoVO();
-					BeanUtils.copyProperties(productInfo,productInfoVO);
+					//复制类目信息
+					BeanUtils.copyProperties(productInfo, productInfoVO);
 					productInfoVOList.add(productInfoVO);
 				}
 			}
 			productVO.setProductInfoVOList(productInfoVOList);
 			productVOList.add(productVO);
 		}
-		ResultVO resultVO = new ResultVO();
-		resultVO.setCode(1);
-		resultVO.setMsg("成功");
-		resultVO.setData(productVOList);
-		return resultVO;
+
+		return ResultVOUtil.success(productVOList);
 	}
 }
