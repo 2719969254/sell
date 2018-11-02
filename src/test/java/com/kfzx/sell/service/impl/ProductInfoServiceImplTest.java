@@ -20,8 +20,8 @@ public class ProductInfoServiceImplTest {
 	@Autowired
 	private ProductInfoServiceImpl productInfoService;
 	@Test
-	public void findOne() {
-		Optional<ProductInfo> one = productInfoService.findOne("11221");
+	public void findOne(String OrderId) {
+		Optional<ProductInfo> one = productInfoService.findOne(OrderId);
 		System.out.println(one);
 	}
 

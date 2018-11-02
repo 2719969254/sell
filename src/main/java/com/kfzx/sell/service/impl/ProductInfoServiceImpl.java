@@ -1,5 +1,8 @@
 package com.kfzx.sell.service.impl;
 
+import com.kfzx.sell.dto.CartDTO;
+import com.kfzx.sell.enums.ResultEnum;
+import com.kfzx.sell.exception.SellException;
 import com.kfzx.sell.repository.ProductInfoRepository;
 import com.kfzx.sell.enums.ProductStatusEnum;
 import com.kfzx.sell.entity.ProductInfo;
@@ -30,7 +33,9 @@ public class ProductInfoServiceImpl implements ProductInfoService {
 	 */
 	@Override
 	public Optional<ProductInfo> findOne(String id) {
-		return productInfoRepository.findById(id);
+		Optional<ProductInfo> byId = productInfoRepository.findById(id);
+		System.out.println(byId);
+		return byId;
 	}
 
 	/**
@@ -62,5 +67,37 @@ public class ProductInfoServiceImpl implements ProductInfoService {
 	@Override
 	public ProductInfo save(ProductInfo productInfo) {
 		return productInfoRepository.save(productInfo);
+	}
+
+	/**
+	 * 加库存
+	 *
+	 * @param cartDTOList 购物车DTO
+	 */
+	@Override
+	public void increaseStock(List<CartDTO> cartDTOList) {
+
+	}
+
+	/**
+	 * 减库存
+	 *
+	 * @param cartDTOList 购物车DTO
+	 */
+	@Override
+	public void decreaseStock(List<CartDTO> cartDTOList) {
+		for (CartDTO cartDTO : cartDTOList) {
+			Optional<ProductInfo> productInfo = productInfoRepository.findById(cartDTO.getProductId());
+			if(productInfo == null){
+				throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
+			}
+			Integer result = productInfo.get().getProductStock() - cartDTO.getProductQuantity();
+			if(result < 0){
+				throw new SellException(ResultEnum.PRODUCT_STOCK_ERROR);
+			}
+			productInfo.get().setProductStock(result);
+
+			productInfoRepository.save(productInfo.get());
+		}
 	}
 }

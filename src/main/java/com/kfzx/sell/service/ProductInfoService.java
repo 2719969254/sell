@@ -1,5 +1,6 @@
 package com.kfzx.sell.service;
 
+import com.kfzx.sell.dto.CartDTO;
 import com.kfzx.sell.entity.ProductInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,4 +39,16 @@ public interface ProductInfoService {
 	 * @return ProductInfo
 	 */
 	ProductInfo save(ProductInfo productInfo);
+
+	/**
+	 * 加库存
+	 * @param cartDTOList 购物车DTO
+	 */
+	void increaseStock(List<CartDTO> cartDTOList);
+
+	/**
+	 * 减库存
+	 * @param cartDTOList 购物车DTO
+	 */
+	void decreaseStock(List<CartDTO> cartDTOList);
 }
