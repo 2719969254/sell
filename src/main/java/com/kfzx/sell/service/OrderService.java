@@ -1,11 +1,8 @@
 package com.kfzx.sell.service;
 
 import com.kfzx.sell.dto.OrderDTO;
-import com.kfzx.sell.entity.OrderMaster;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.Optional;
 
 /**
  * 订单service
@@ -23,8 +20,10 @@ public interface OrderService {
 
 	/**
 	 * 查询单个订单.
+	 * @param orderId 订单id
+	 * @return OrderDTO
 	 */
-	Optional<OrderMaster> findOne(String orderId);
+	OrderDTO findOne(String orderId);
 
 	/**
 	 * 查询订单列表.

@@ -30,6 +30,7 @@ public interface ProductInfoService {
 
 	/**
 	 * 查询所有商品信息，并通过分页返回
+	 * @param pageable pageable
 	 * @return Page<ProductInfo>
 	 */
 	Page<ProductInfo> findAll(Pageable pageable);

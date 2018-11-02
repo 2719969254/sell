@@ -7,7 +7,7 @@ import com.kfzx.sell.vo.ResultVO;
  * @version V1.0
  * @Date 2018/10/25
  */
-@SuppressWarnings("AlibabaClassNamingShouldBeCamel")
+@SuppressWarnings("all")
 public class ResultVOUtil {
 	public static ResultVO success(Object object) {
 		ResultVO resultVO = new ResultVO();

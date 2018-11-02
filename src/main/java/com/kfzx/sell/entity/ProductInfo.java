@@ -18,9 +18,10 @@ import java.math.BigDecimal;
 public class ProductInfo {
 	/**
 	 * 商品id
+	 * <p>
+	 * "@GeneratedValue(strategy = GenerationType.IDENTITY)"
 	 */
 	@Id
-	//@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String productId;
 	/**
 	 * 商品名称

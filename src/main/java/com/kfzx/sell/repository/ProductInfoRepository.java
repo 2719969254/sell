@@ -13,6 +13,11 @@ import java.util.List;
  * @Date 2018/10/24
  */
 public interface ProductInfoRepository extends JpaRepository<ProductInfo,String> {
+	/**
+	 * 方法
+	 * @param productStatus productStatus
+	 * @return List<ProductInfo>
+	 */
 	List<ProductInfo> findByProductStatus(Integer productStatus);
 
 }

@@ -28,10 +28,14 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/buyer/product")
 public class BuyerProductController {
+	private final ProductInfoService productInfoService;
+	private final ProductCategoryService productCategoryService;
+
 	@Autowired
-	private ProductInfoService productInfoService;
-	@Autowired
-	private ProductCategoryService productCategoryService;
+	public BuyerProductController(ProductInfoService productInfoService, ProductCategoryService productCategoryService) {
+		this.productInfoService = productInfoService;
+		this.productCategoryService = productCategoryService;
+	}
 
 	@SuppressWarnings("AlibabaRemoveCommentedCode")
 	@GetMapping("/list")

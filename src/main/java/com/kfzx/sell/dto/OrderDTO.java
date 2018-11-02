@@ -1,51 +1,66 @@
 package com.kfzx.sell.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.kfzx.sell.entity.OrderDetail;
-import com.kfzx.sell.enums.OrderStatusEnum;
-import com.kfzx.sell.enums.PayStatusEnum;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 /**
  * @author VicterTian
  * @version V1.0
  * @Date 2018/10/26
+ *
+ * "@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+ * "@JsonInclude(JsonInclude.Include.NON_NULL)
+ *
  */
 @Data
-//@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrderDTO {
 
-	/** 订单id. */
+	/**
+	 * 订单id.
+	 */
 	private String orderId;
 
-	/** 买家名字. */
+	/**
+	 * 买家名字.
+	 */
 	private String buyerName;
 
-	/** 买家手机号. */
+	/**
+	 * 买家手机号.
+	 */
 	private String buyerPhone;
 
-	/** 买家地址. */
+	/**
+	 * 买家地址.
+	 */
 	private String buyerAddress;
 
-	/** 买家微信Openid. */
+	/**
+	 * 买家微信Openid.
+	 */
 	private String buyerOpenid;
 
-	/** 订单总金额. */
+	/**
+	 * 订单总金额.
+	 */
 	private BigDecimal orderAmount;
 
-	/** 订单状态, 默认为0新下单. */
+	/**
+	 * 订单状态, 默认为0新下单.
+	 */
 	private Integer orderStatus;
 
-	/** 支付状态, 默认为0未支付. */
+	/**
+	 * 支付状态, 默认为0未支付.
+	 */
 	private Integer payStatus;
 
-	/** 创建时间. *//*
+	/**
+	 * 创建时间.
+	 *//*
 	@JsonSerialize(using = Date2LongSerializer.class)
 	private Date createTime;
 

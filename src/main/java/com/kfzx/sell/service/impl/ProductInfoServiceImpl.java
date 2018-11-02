@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,8 +23,12 @@ import java.util.Optional;
  */
 @Service
 public class ProductInfoServiceImpl implements ProductInfoService {
+	private final ProductInfoRepository productInfoRepository;
+
 	@Autowired
-	private ProductInfoRepository productInfoRepository;
+	public ProductInfoServiceImpl(ProductInfoRepository productInfoRepository) {
+		this.productInfoRepository = productInfoRepository;
+	}
 
 	/**
 	 * 根据id查询商品信息
@@ -75,8 +80,14 @@ public class ProductInfoServiceImpl implements ProductInfoService {
 	 * @param cartDTOList 购物车DTO
 	 */
 	@Override
+	@Transactional(rollbackFor = SellException.class)
 	public void increaseStock(List<CartDTO> cartDTOList) {
-
+		for (CartDTO cartDTO : cartDTOList) {
+			Optional<ProductInfo> productInfo = productInfoRepository.findById(cartDTO.getProductId());
+			if (productInfo.orElse(null) == null) {
+				throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
+			}
+		}
 	}
 
 	/**
@@ -85,19 +96,20 @@ public class ProductInfoServiceImpl implements ProductInfoService {
 	 * @param cartDTOList 购物车DTO
 	 */
 	@Override
+	@Transactional(rollbackFor = SellException.class)
 	public void decreaseStock(List<CartDTO> cartDTOList) {
 		for (CartDTO cartDTO : cartDTOList) {
 			Optional<ProductInfo> productInfo = productInfoRepository.findById(cartDTO.getProductId());
-			if(productInfo == null){
+			if (productInfo.orElse(null) == null) {
 				throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
 			}
-			Integer result = productInfo.get().getProductStock() - cartDTO.getProductQuantity();
-			if(result < 0){
+			Integer result = productInfo.orElse(null).getProductStock() - cartDTO.getProductQuantity();
+			if (result < 0) {
 				throw new SellException(ResultEnum.PRODUCT_STOCK_ERROR);
 			}
-			productInfo.get().setProductStock(result);
+			productInfo.orElse(null).setProductStock(result);
 
-			productInfoRepository.save(productInfo.get());
+			productInfoRepository.save(productInfo.orElse(null));
 		}
 	}
 }

@@ -2,7 +2,6 @@ package com.kfzx.sell.service.impl;
 
 import com.kfzx.sell.dto.OrderDTO;
 import com.kfzx.sell.entity.OrderDetail;
-import com.kfzx.sell.entity.OrderMaster;
 import com.kfzx.sell.enums.OrderStatusEnum;
 import com.kfzx.sell.enums.PayStatusEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -62,9 +61,9 @@ public class OrderServiceImplTest {
 
 	@Test
 	public void findOne() {
-		OrderMaster result = orderService.findOne(ORDER_ID).get();
+		OrderDTO result = orderService.findOne(ORDER_ID);
 		log.info("【查询单个订单】result={}", result);
-		Assert.assertEquals(ORDER_ID, result);
+		Assert.assertEquals(ORDER_ID, result.getOrderId());
 	}
 
 	@Test
@@ -74,7 +73,7 @@ public class OrderServiceImplTest {
 		Assert.assertNotEquals(0, orderDTOPage.getTotalElements());
 	}
 
-	/*@Test
+	@Test
 	public void cancel() {
 		OrderDTO orderDTO = orderService.findOne(ORDER_ID);
 		OrderDTO result = orderService.cancel(orderDTO);
@@ -101,5 +100,5 @@ public class OrderServiceImplTest {
 		Page<OrderDTO> orderDTOPage = orderService.findList(request);
 //        Assert.assertNotEquals(0, orderDTOPage.getTotalElements());
 		Assert.assertTrue("查询所有的订单列表", orderDTOPage.getTotalElements() > 0);
-	}*/
+	}
 }

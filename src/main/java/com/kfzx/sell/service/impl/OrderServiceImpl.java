@@ -1,5 +1,6 @@
 package com.kfzx.sell.service.impl;
 
+import com.kfzx.sell.converter.OrderMaster2OrderDTOConverter;
 import com.kfzx.sell.dto.CartDTO;
 import com.kfzx.sell.dto.OrderDTO;
 import com.kfzx.sell.entity.OrderDetail;
@@ -17,6 +18,7 @@ import com.kfzx.sell.utils.KeyUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,27 +36,31 @@ import java.util.stream.Collectors;
  */
 @Service
 public class OrderServiceImpl implements OrderService {
+	private final ProductInfoService productInfoService;
+	private final OrderDetailRepository orderDetailRepository;
+	private final OrderMasterRepository orderMasterRepository;
+
 	@Autowired
-	private ProductInfoService productInfoService;
-	@Autowired
-	private OrderDetailRepository orderDetailRepository;
-	@Autowired
-	private OrderMasterRepository orderMasterRepository;
+	public OrderServiceImpl(ProductInfoService productInfoService, OrderDetailRepository orderDetailRepository, OrderMasterRepository orderMasterRepository) {
+		this.productInfoService = productInfoService;
+		this.orderDetailRepository = orderDetailRepository;
+		this.orderMasterRepository = orderMasterRepository;
+	}
 
 	/**
 	 * 创建订单.
 	 *
-	 * @param orderDTO
+	 * @param orderDTO 订单DTO对象
 	 */
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public OrderDTO create(OrderDTO orderDTO) {
 		String orderId = KeyUtil.genUniqueKey();
 		BigDecimal orderAmount = new BigDecimal(BigInteger.ZERO);
 //		List<CartDTO> cartDTOList = new ArrayList<>();
 		//1.查询商品（数量，价格）
 		for (OrderDetail orderDetail : orderDTO.getOrderDetailList()) {
-			ProductInfo productInfo = productInfoService.findOne(orderDetail.getProductId()).get();
+			ProductInfo productInfo = productInfoService.findOne(orderDetail.getProductId()).orElse(null);
 			//如果为空，则说明商品不存在
 			if (productInfo == null) {
 				throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
@@ -93,26 +99,38 @@ public class OrderServiceImpl implements OrderService {
 	 * @param orderId 订单id
 	 */
 	@Override
-	public Optional<OrderMaster> findOne(String orderId) {
+	public OrderDTO findOne(String orderId) {
 		Optional<OrderMaster> optional = orderMasterRepository.findById(orderId);
-		return optional;
+		if (optional.orElse(null) == null) {
+			throw new SellException(ResultEnum.ORDER_NOT_EXIST);
+		}
+		List<OrderDetail> orderDetails = orderDetailRepository.findByOrderId(orderId);
+		if (orderDetails == null) {
+			throw new SellException(ResultEnum.ORDERDETAIL_NOT_EXIST);
+		}
+		OrderDTO orderDTO = new OrderDTO();
+		BeanUtils.copyProperties(optional.get(), orderDTO);
+		orderDTO.setOrderDetailList(orderDetails);
+		return orderDTO;
 	}
 
 	/**
 	 * 查询订单列表.
 	 *
-	 * @param buyerOpenid
-	 * @param pageable
+	 * @param buyerOpenid 用户openid
+	 * @param pageable    pageable
 	 */
 	@Override
 	public Page<OrderDTO> findList(String buyerOpenid, Pageable pageable) {
-		return null;
+		Page<OrderMaster> orderMasterPage = orderMasterRepository.findByBuyerOpenid(buyerOpenid, pageable);
+		List<OrderDTO> orderDTOList = OrderMaster2OrderDTOConverter.convert(orderMasterPage.getContent());
+		return new PageImpl<>(orderDTOList, pageable, orderMasterPage.getTotalElements());
 	}
 
 	/**
 	 * 取消订单.
 	 *
-	 * @param orderDTO
+	 * @param orderDTO orderDTO
 	 */
 	@Override
 	public OrderDTO cancel(OrderDTO orderDTO) {
@@ -122,7 +140,7 @@ public class OrderServiceImpl implements OrderService {
 	/**
 	 * 完结订单.
 	 *
-	 * @param orderDTO
+	 * @param orderDTO orderDTO
 	 */
 	@Override
 	public OrderDTO finish(OrderDTO orderDTO) {
@@ -132,7 +150,7 @@ public class OrderServiceImpl implements OrderService {
 	/**
 	 * 支付订单.
 	 *
-	 * @param orderDTO
+	 * @param orderDTO orderDTO
 	 */
 	@Override
 	public OrderDTO paid(OrderDTO orderDTO) {
@@ -142,7 +160,7 @@ public class OrderServiceImpl implements OrderService {
 	/**
 	 * 查询订单列表.
 	 *
-	 * @param pageable
+	 * @param pageable orderDTO
 	 */
 	@Override
 	public Page<OrderDTO> findList(Pageable pageable) {

@@ -7,6 +7,7 @@ import com.kfzx.sell.enums.ResultEnum;
  * @version V1.0
  * @Date 2018/10/26
  */
+@SuppressWarnings("all")
 public class SellException extends RuntimeException{
 
 	private Integer code;
