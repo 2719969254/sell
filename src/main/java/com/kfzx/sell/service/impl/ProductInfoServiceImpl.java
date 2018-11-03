@@ -87,6 +87,9 @@ public class ProductInfoServiceImpl implements ProductInfoService {
 			if (productInfo.orElse(null) == null) {
 				throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
 			}
+			Integer result = productInfo.orElse(null).getProductStock() + cartDTO.getProductQuantity();
+			productInfo.orElse(null).setProductStock(result);
+			productInfoRepository.save(productInfo.orElse(null));
 		}
 	}
 

@@ -60,7 +60,8 @@ public class OrderDTO {
 
 	/**
 	 * 创建时间.
-	 *//*
+	 */
+	/*
 	@JsonSerialize(using = Date2LongSerializer.class)
 	private Date createTime;
 
