@@ -1,5 +1,6 @@
 package com.kfzx.sell.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.kfzx.sell.entity.OrderDetail;
 import lombok.Data;
 
@@ -16,6 +17,7 @@ import java.util.List;
  *
  */
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrderDTO {
 
 	/**
@@ -61,13 +63,13 @@ public class OrderDTO {
 	/**
 	 * 创建时间.
 	 */
-	/*
-	@JsonSerialize(using = Date2LongSerializer.class)
-	private Date createTime;
+
+	//@JsonSerialize(using = Date2LongSerializer.class)
+	private String createTime;
 
 	/** 更新时间. */
-/*	@JsonSerialize(using = Date2LongSerializer.class)
-	private Date updateTime;*/
+	//@JsonSerialize(using = Date2LongSerializer.class)
+	private String updateTime;
 
 	List<OrderDetail> orderDetailList;
 
