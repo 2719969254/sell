@@ -10,6 +10,9 @@ server:
   servlet:
     context-path: /sell
   port: 8080
+wechat:
+  mpAppId: wx423bd3ecf446a34b
+  mpAppSecret: df01772e81b64268ec43335102a89702
 #logging:
 #  pattern:
 #    console: "%d - %msg%n"
